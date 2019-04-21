@@ -1,6 +1,7 @@
 document.onreadystatechange = function () {
   if (document.readyState == 'interactive') {
-    const colorObjs = [] // hex to vote count
+    let pairs = null
+    const colorVotes = {} // hex: vote count
     const colorVals = [
       '#fff9f4', 
       '#fff6f2',
@@ -8,9 +9,10 @@ document.onreadystatechange = function () {
       '#fff8f4',
       '#2d4975'
     ]
-    // initialize colorObjs
+
+    // initialize colorVotes
     colorVals.forEach((colorVal) => {
-      colorObjs.push({ color: colorVal, votes: 0, showCount: 0 })
+      colorVotes[colorVal] = 0
     })
 
     var body = document.getElementById('body');
@@ -34,31 +36,6 @@ document.onreadystatechange = function () {
       return colorSet
     }
 
-    function findLowestColor(arr) {
-      let lowestColorCount = Number.POSITIVE_INFINITY
-      let lowestColor
-      arr.forEach((colorObj) => {
-        if (lowestColorCount > colorObj.showCount) {
-          lowestColor = colorObj
-          lowestColorCount = colorObj.showCount
-        }
-      })
-      return lowestColor
-    }
-
-    function getNextColors() {
-      color1 = findLowestColor(colorObjs)
-      color2 = findLowestColor(colorObjs.filter((clr) => clr !== color1))
-
-      colorObjs.forEach((clrObj) => {
-        if (clrObj === color1 || clrObj === color2) {
-          clrObj.showCount += 1
-        }
-      })
-      const newColors = [color1, color2]
-      return newColors
-    }
-
     function rgbToHex(red, green, blue) {
       var rgb = blue | (green << 8) | (red << 16);
       return '#' + (0x1000000 + rgb).toString(16).slice(1)
@@ -71,16 +48,31 @@ document.onreadystatechange = function () {
     }
 
     function setNewColors() {
-      const colorSet = getNextColors()
-      document.getElementById('side1').style.backgroundColor = colorSet[0].color
-      document.getElementById('side2').style.backgroundColor = colorSet[1].color
+      // initialize
+      if (!pairs) {
+        console.log('generating pairs')
+        pairs = generateColorPairs(colorVals)
+        console.log('pairs')
+      }
+
+      let colorPair
+      if (pairs.length) {
+        colorPair = pairs.pop()
+      } else {
+        console.log('need to generate next round!')
+        // logic around removing lowest colors, redefining colorVals
+        // pairs = generateColorPairs(colorVals)
+      }
+       
+      document.getElementById('side1').style.backgroundColor = colorPair[0]
+      document.getElementById('side2').style.backgroundColor = colorPair[1]
     }
 
     function upVoteClickedColor (evt) {
       const hexColor = getHexColorFromEvtTarget(evt)
-      const colorObj = colorObjs.find((clrObj) => clrObj.color === hexColor)
-      colorObj.votes += 1
-      console.log(colorObjs)
+      colorVotes[hexColor] += 1
+
+      console.log(colorVotes)
     }
     
     function handleClick(evt) {
@@ -91,6 +83,7 @@ document.onreadystatechange = function () {
     document.getElementById('side1').addEventListener('click', handleClick);
     document.getElementById('side2').addEventListener('click', handleClick);
 
+    
     setNewColors()
   }
 }
