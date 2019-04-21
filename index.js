@@ -1,5 +1,12 @@
 document.onreadystatechange = function () {
   if (document.readyState == 'interactive') {
+    var body = document.getElementById('body');
+    body.style.fontFamily = 'Merriweather'
+    body.style.fontSize = '26px'
+    Array.prototype.forEach.call(document.getElementsByTagName('input'), (el) => {
+      el.style.fontFamily = 'Merriweather'
+    })
+
     let pairs = null
     const roundResults = []
     let roundVotes = {} // hex color -> vote count
@@ -17,10 +24,6 @@ document.onreadystatechange = function () {
         roundVotes[colorVal] = 0
       })
     }
-
-    var body = document.getElementById('body');
-    body.style.fontFamily = 'Merriweather'
-    body.style.fontSize = '40px'
 
     function generateColorPairs(arr) {
       const colorSet = []
@@ -69,12 +72,14 @@ document.onreadystatechange = function () {
       if (pairs.length) {
         colorPair = pairs.pop()
       } else {
-        console.log('need to generate next round!')
+        console.log('generating next round!')
         roundResults.push(roundVotes)
         refineColors()
         if (colorVals.length === 1) {
           console.log('winning color', colorVals[0])
           console.log('all round results', roundResults)
+          document.getElementById('side1').removeEventListener('click', handleClick);
+          document.getElementById('side2').removeEventListener('click', handleClick);
           return
         } else {
           setNewRoundVotes()
@@ -103,10 +108,10 @@ document.onreadystatechange = function () {
       setNewColors()
     }
 
-    document.getElementById('side1').addEventListener('click', handleClick);
-    document.getElementById('side2').addEventListener('click', handleClick);
+    // document.getElementById('side1').addEventListener('click', handleClick);
+    // document.getElementById('side2').addEventListener('click', handleClick);
 
-    setNewRoundVotes()
-    setNewColors()
+    // setNewRoundVotes()
+    // setNewColors()
   }
 }
