@@ -6,7 +6,16 @@ document.onreadystatechange = function () {
     Array.prototype.forEach.call(document.getElementsByTagName('input'), (el) => {
       el.style.fontFamily = 'Merriweather'
     })
+   
+    const colorInput = document.getElementById('color-text')
+    body.style.backgroundColor = '#79b56'
+    colorInput.value = '#79b56'
 
+    document.getElementById('goBtn').addEventListener('click', () => {
+      // populate colorVals with colors of a certain intensity
+      console.log('listening')
+    });
+    
     let pairs = null
     const roundResults = []
     let roundVotes = {} // hex color -> vote count

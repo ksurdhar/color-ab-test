@@ -6,7 +6,6 @@ html {
 
 body {
   align-items: center;
-  /* background:#728EB2; */
   margin: 0;
   height: 100%;
   width: 100%;
@@ -35,6 +34,19 @@ body {
   padding-bottom: 20px;
 }
 
+#goBtn{
+  border: 3px solid black;
+  border-radius: 5px;
+  padding: 5px 20px;
+  max-width: fit-content;
+}
+
+.btnContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 input {
   font-size: 26px;
   border: none;
@@ -42,6 +54,7 @@ input {
   border-bottom: 3px black solid;
   width: 100%;
   text-align: center;
+  background-color: transparent;
 }
 
 #color-number {
