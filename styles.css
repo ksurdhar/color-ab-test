@@ -34,12 +34,17 @@ body {
   padding-bottom: 20px;
 }
 
-#goBtn{
+#goBtn {
   border: 3px solid black;
   border-radius: 5px;
   padding: 5px 20px;
   max-width: fit-content;
+  cursor: pointer;
 }
+
+/* #goBtn:hover {
+  opacity: 1;
+} */
 
 .btnContainer {
   display: flex;
@@ -57,9 +62,20 @@ input {
   background-color: transparent;
 }
 
-#color-number {
+#varients {
   padding-bottom: 6px;
   margin-top: -6px;
+}
+
+.colorContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.colorContainer > div {
+  width: 100%;
+  height: 100%;
 }
 
 .vote-page {

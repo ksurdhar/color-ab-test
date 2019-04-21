@@ -1,20 +1,51 @@
+import chroma from 'chroma-js'
+
 document.onreadystatechange = function () {
   if (document.readyState == 'interactive') {
-    var body = document.getElementById('body');
+    const $ = document.getElementById.bind(document)
+    const get = (arg) => document.getElementsByClassName(arg)[0]
+    window.chroma = chroma
+    const body = $('body')
     body.style.fontFamily = 'Merriweather'
     body.style.fontSize = '26px'
+
     Array.prototype.forEach.call(document.getElementsByTagName('input'), (el) => {
       el.style.fontFamily = 'Merriweather'
     })
-   
-    const colorInput = document.getElementById('color-text')
-    body.style.backgroundColor = '#79b56'
-    colorInput.value = '#79b56'
 
-    document.getElementById('goBtn').addEventListener('click', () => {
-      // populate colorVals with colors of a certain intensity
-      console.log('listening')
-    });
+    const OGColor = '#FFD662'
+    body.style.backgroundColor = OGColor
+    const colorInput = $('color-text')
+    colorInput.value = OGColor
+  
+    $('goBtn').addEventListener('click', () => {
+      const colorContainer = get('colorContainer')
+      while (colorContainer.firstChild) {
+        colorContainer.removeChild(colorContainer.firstChild);
+      }
+
+      const chromaClr = chroma(colorInput.value)
+      const varients = $('varients').value
+      const intensity = $('intensity').value
+
+      const valArr = []
+      for (var x = varients / 2; x > 0; x -= 1) {
+        const val = intensity * (x / (varients / 2))
+        valArr.push(val)
+        valArr.push(-val)
+      }
+      valArr.sort()
+      valArr.forEach((val) => {
+        // if this, saturate
+        // if this, darken
+        // if this, hue shift
+        const newClr = chromaClr.darken(val).saturate(-val)
+        // randomly darken, saturate, hue shift
+        const newNode = document.createElement("div")
+        newNode.style.backgroundColor = newClr.hex()
+        colorContainer.appendChild(newNode)
+      })
+    })
     
     let pairs = null
     const roundResults = []
@@ -87,8 +118,8 @@ document.onreadystatechange = function () {
         if (colorVals.length === 1) {
           console.log('winning color', colorVals[0])
           console.log('all round results', roundResults)
-          document.getElementById('side1').removeEventListener('click', handleClick);
-          document.getElementById('side2').removeEventListener('click', handleClick);
+          $('side1').removeEventListener('click', handleClick);
+          $('side2').removeEventListener('click', handleClick);
           return
         } else {
           setNewRoundVotes()
@@ -101,8 +132,8 @@ document.onreadystatechange = function () {
         }
       }
        
-      document.getElementById('side1').style.backgroundColor = colorPair[0]
-      document.getElementById('side2').style.backgroundColor = colorPair[1]
+      $('side1').style.backgroundColor = colorPair[0]
+      $('side2').style.backgroundColor = colorPair[1]
     }
 
     function upVoteClickedColor (evt) {
@@ -117,8 +148,8 @@ document.onreadystatechange = function () {
       setNewColors()
     }
 
-    // document.getElementById('side1').addEventListener('click', handleClick);
-    // document.getElementById('side2').addEventListener('click', handleClick);
+    // $('side1').addEventListener('click', handleClick);
+    // $('side2').addEventListener('click', handleClick);
 
     // setNewRoundVotes()
     // setNewColors()
