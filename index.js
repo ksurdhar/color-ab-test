@@ -1,7 +1,7 @@
 document.onreadystatechange = function () {
   if (document.readyState == 'interactive') {
     const colorObjs = [] // hex to vote count
-    const colors = [
+    const colorVals = [
       '#fff9f4', 
       '#fff6f2',
       '#fffaf4',
@@ -9,13 +9,30 @@ document.onreadystatechange = function () {
       '#2d4975'
     ]
     // initialize colorObjs
-    colors.forEach((color) => {
-      colorObjs.push({ color: color, votes: 0, showCount: 0 })
+    colorVals.forEach((colorVal) => {
+      colorObjs.push({ color: colorVal, votes: 0, showCount: 0 })
     })
 
     var body = document.getElementById('body');
     body.style.fontFamily = 'Merriweather'
     body.style.fontSize = '40px'
+
+    function generateColorPairs(arr) {
+      const colorSet = []
+      const colorsExamined = []
+
+      arr.forEach((colorX) => {
+        colorsExamined.push(colorX)
+
+        arr.forEach((colorY) => {
+          if (!colorsExamined.includes(colorY)) {
+            colorSet.push([colorX, colorY])    
+          }
+        })
+      })
+
+      return colorSet
+    }
 
     function findLowestColor(arr) {
       let lowestColorCount = Number.POSITIVE_INFINITY
